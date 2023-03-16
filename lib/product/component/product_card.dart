@@ -2,6 +2,8 @@ import 'package:acutal/common/const/colors.dart';
 import 'package:acutal/restaurant/model/restaurant_detail_model.dart';
 import 'package:flutter/material.dart';
 
+import '../model/product_model.dart';
+
 class ProductCard extends StatelessWidget {
   final Image image;
   final String name;
@@ -16,7 +18,21 @@ class ProductCard extends StatelessWidget {
     required this.price,
   }) : super(key: key);
 
-  factory ProductCard.fromModel({required RestaurantProductModel model}) {
+  factory ProductCard.fromProductModel({required ProductModel model}) {
+    return ProductCard(
+      image: Image.network(
+        model.imgUrl,
+        width: 110,
+        height: 110,
+        fit: BoxFit.cover,
+      ),
+      name: model.name,
+      detail: model.detail,
+      price: model.price,
+    );
+  }
+
+  factory ProductCard.fromRestaurantProductModel({required RestaurantProductModel model}) {
     return ProductCard(
       image: Image.network(
         model.imgUrl,

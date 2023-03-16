@@ -4,6 +4,7 @@ import 'package:acutal/restaurant/model/restaurant_detail_model.dart';
 import 'package:acutal/restaurant/model/restaurant_model.dart';
 import 'package:acutal/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 
 final restaurantDetailProvider = Provider.family<RestaurantModel?, String>((ref, id) {
   /// restaurantProvider 가 변하면 Detail도 같이 빌드되어야 됨
@@ -14,7 +15,8 @@ final restaurantDetailProvider = Provider.family<RestaurantModel?, String>((ref,
     return null;
   }
 
-  return state.data.firstWhere((element) => element.id == id);
+  // collection.dart 를 import해야 함
+  return state.data.firstWhereOrNull((element) => element.id == id);
 });
 
 /// provider에 제네릭은
@@ -53,7 +55,13 @@ class RestaurantStateNotifier extends PaginationProvider<RestaurantModel, Restau
 
     final resp = await (repository.getRestaurantDetail(id: id));
 
-    state = pState.copyWith(data: pState.data.map<RestaurantModel>((e) => e.id == id ? resp : e).toList());
+    if (pState.data.where((e) => e.id == id).isEmpty) {
+      state = pState.copyWith(
+        data: <RestaurantModel>[...pState.data, resp],
+      );
+    } else {
+      state = pState.copyWith(data: pState.data.map<RestaurantModel>((e) => e.id == id ? resp : e).toList());
+    }
   }
 }
 

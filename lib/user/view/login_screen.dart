@@ -1,11 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:acutal/common/const/colors.dart';
 import 'package:acutal/common/const/data.dart';
 import 'package:acutal/common/dio/dio.dart';
 import 'package:acutal/common/layout/default_layout.dart';
 import 'package:acutal/common/secure_storage.dart';
+import 'package:acutal/common/utils/data_utils.dart';
 import 'package:acutal/common/view/root_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +67,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: () async {
                     //final rawString = 'test@codefactory.ai:testtest';
                     final rawString = '$username:$password';
-                    Codec<String, String> string2Base64 = utf8.fuse(base64);
 
-                    String token = string2Base64.encode(rawString);
+                    String token = DataUtils.plainToBase64(rawString);
+                    // Codec<String, String> string2Base64 = utf8.fuse(base64);
+                    //
+                    // String token = string2Base64.encode(rawString);
 
                     final resp = await dio.post(
                       'http://$ip/auth/login',

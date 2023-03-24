@@ -8,7 +8,8 @@ class TokenResponse {
 
   TokenResponse({required this.accessToken});
 
-  factory TokenResponse.fromJson(Map<String, dynamic> json) => _$TokenResponseFromJson(json);
+  factory TokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$TokenResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$TokenResponseToJson(this);
 }

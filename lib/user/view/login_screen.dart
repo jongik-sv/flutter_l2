@@ -5,6 +5,8 @@ import 'package:acutal/common/layout/default_layout.dart';
 import 'package:acutal/common/secure_storage.dart';
 import 'package:acutal/common/utils/data_utils.dart';
 import 'package:acutal/common/view/root_tab.dart';
+import 'package:acutal/user/model/auth_provider.dart';
+import 'package:acutal/user/model/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../common/component/custom_text_form_field.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'login';
+
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -25,7 +29,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     // final dio = Dio();
-    final dio = ref.watch(dioProvider);
+    // final dio = ref.watch(dioProvider);
+    final state = ref.watch(userMeProvider);
     return DefaultLayout(
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -64,35 +69,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () async {
-                    //final rawString = 'test@codefactory.ai:testtest';
-                    final rawString = '$username:$password';
-
-                    String token = DataUtils.plainToBase64(rawString);
-                    // Codec<String, String> string2Base64 = utf8.fuse(base64);
-                    //
-                    // String token = string2Base64.encode(rawString);
-
-                    final resp = await dio.post(
-                      'http://$ip/auth/login',
-                      options: Options(headers: {'authorization': 'Basic $token'}),
-                    );
-
-                    final refreshToken = resp.data['refreshToken'];
-                    final accessToken = resp.data['accessToken'];
-
-                    final storage = ref.read(secureStorageProvider);
-                    await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
-                    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
-
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => RootTab()));
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
+                  onPressed: state is UserModelLoading
+                      ? null
+                      : () async {
+                          ref
+                              .read(userMeProvider.notifier)
+                              .login(username: username, password: password);
+                          // //final rawString = 'test@codefactory.ai:testtest';
+                          // final rawString = '$username:$password';
+                          //
+                          // String token = DataUtils.plainToBase64(rawString);
+                          // // Codec<String, String> string2Base64 = utf8.fuse(base64);
+                          // //
+                          // // String token = string2Base64.encode(rawString);
+                          //
+                          // final resp = await dio.post(
+                          //   'http://$ip/auth/login',
+                          //   options: Options(headers: {'authorization': 'Basic $token'}),
+                          // );
+                          //
+                          // final refreshToken = resp.data['refreshToken'];
+                          // final accessToken = resp.data['accessToken'];
+                          //
+                          // final storage = ref.read(secureStorageProvider);
+                          // await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
+                          // await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
+                          //
+                          // Navigator.of(context).push(MaterialPageRoute(builder: (_) => RootTab()));
+                        },
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
                   child: Text('로그인'),
                 ),
                 TextButton(
                   onPressed: () async {},
-                  style: ElevatedButton.styleFrom(foregroundColor: PRIMARY_COLOR),
+                  style:
+                      ElevatedButton.styleFrom(foregroundColor: PRIMARY_COLOR),
                   child: Text('회원가입'),
                 ),
               ],

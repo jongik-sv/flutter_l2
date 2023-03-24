@@ -5,10 +5,10 @@ part 'user_model.g.dart';
 
 abstract class UserModelBase {}
 
-class UserModeError extends UserModelBase {
+class UserModelError extends UserModelBase {
   final String message;
 
-  UserModeError({required this.message});
+  UserModelError({required this.message});
 }
 
 class UserModelLoading extends UserModelBase {}
@@ -26,7 +26,8 @@ class UserModel extends UserModelBase {
     required this.imageUrl,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

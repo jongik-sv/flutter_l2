@@ -1,11 +1,14 @@
 import 'package:acutal/common/const/colors.dart';
 import 'package:acutal/common/layout/default_layout.dart';
 import 'package:acutal/product/view/product_screen.dart';
+import 'package:acutal/user/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../restaurant/view/restaurant_screen.dart';
 
 class RootTab extends StatefulWidget {
+  static String get routeName => 'home';
+
   const RootTab({Key? key}) : super(key: key);
 
   @override
@@ -21,7 +24,9 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     controller = TabController(
-        length: 4, vsync: this); // vsync는 TickerProvider를 상속한 클래스만 쓸수 있는데 여기서 SingleTickerProviderStateMixin을 사용했다.
+        length: 4,
+        vsync:
+            this); // vsync는 TickerProvider를 상속한 클래스만 쓸수 있는데 여기서 SingleTickerProviderStateMixin을 사용했다.
     controller.addListener(tabListener); // 컨트롤러에서 변화가 있으면 tabListener를 실행해 준다.
   }
 
@@ -53,9 +58,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
             child: Text('주문'),
           )),
           Center(
-              child: Container(
-            child: Text('프로필'),
-          )),
+              child: ProfileScreen())
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -73,9 +76,12 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         currentIndex: index,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.fastfood_outlined), label: '음식'),
-          BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined), label: '주문'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: '프로필'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.fastfood_outlined), label: '음식'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.receipt_long_outlined), label: '주문'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline), label: '프로필'),
         ],
       ),
     );

@@ -7,9 +7,13 @@ class LoginResponse {
   final String refreshToken;
   final String accessToken;
 
-  LoginResponse({required this.refreshToken, required this.accessToken});
+  LoginResponse({
+    required this.refreshToken,
+    required this.accessToken,
+  });
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
+  factory LoginResponse.fromJson(Map<String, dynamic> json) =>
+      _$LoginResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 }

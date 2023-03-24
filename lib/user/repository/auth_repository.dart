@@ -1,10 +1,18 @@
+import 'package:acutal/common/dio/dio.dart';
 import 'package:acutal/common/model/login_response.dart';
 import 'package:acutal/common/model/token_response.dart';
 import 'package:acutal/common/utils/data_utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/const/data.dart';
 import '../../common/secure_storage.dart';
+
+final authRepositoryProvider = Provider((ref) {
+  final dio = ref.watch(dioProvider);
+
+  return AuthRepository(baseUrl: 'http://$ip/auth', dio: dio);
+});
 
 class AuthRepository {
   final String baseUrl;
@@ -12,7 +20,10 @@ class AuthRepository {
 
   AuthRepository({required this.baseUrl, required this.dio});
 
-  Future<LoginResponse> login({required String username, required String password}) async {
+  Future<LoginResponse> login({
+    required String username,
+    required String password,
+  }) async {
     final serialized = DataUtils.plainToBase64('$username:$password');
 
     final resp = await dio.post(

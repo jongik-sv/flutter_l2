@@ -23,6 +23,7 @@ class _App extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
         fontFamily: 'NotoSans',
         primarySwatch: Colors.blue,

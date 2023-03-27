@@ -1,4 +1,6 @@
 import 'package:acutal/common/const/data.dart';
+import 'package:acutal/user/provider/auth_provider.dart';
+import 'package:acutal/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,15 +12,16 @@ final dioProvider = Provider<Dio>(
   (ref) {
     final dio = Dio();
     final storage = ref.watch(secureStorageProvider);
-    dio.interceptors.add(CustomInterceptor(storage: storage));
+    dio.interceptors.add(CustomInterceptor(storage: storage, ref: ref));
     return dio;
   },
 );
 
 class CustomInterceptor extends Interceptor {
   final FlutterSecureStorage storage;
+  final Ref ref;
 
-  CustomInterceptor({required this.storage});
+  CustomInterceptor({required this.ref, required this.storage});
 
   /// 1) 요청 보낼 때 보내기 전 호출
   /// 요청이 보내질 때 마다
@@ -101,6 +104,19 @@ class CustomInterceptor extends Interceptor {
         final response = await dio.fetch(options);
         return handler.resolve(response); // 에러에 대한 해결결, 에러가 없어짐
       } on DioError catch (e) {
+
+        /// CircularDependencyError 발생
+        /// A -> B A는 B를 필요로 하고
+        /// B -> A B는 A를 필요로 한다.
+        /// A -> B -> A -> B -> ...  계속 서로를 필요로 한다.
+        /// UserMeProvider는 Dio를 필요로 하고
+        /// Dio는 UserMeProvider(다른 레파지토리에서)를 필요로 한다.
+        /// 그래서 아래 코드를 사용 할 수 없다.
+        // ref.read(userMeProvider.notifier).logout();
+
+        /// 그래서 아래 코드를 사용한다.
+        /// CircularDependency 우회를 위해
+        ref.read(authProvider.notifier).logout();
         // on DioError 일때만 ; 없어도 전체 잡으면 되어서 상관없음
         return handler.reject(err);
       }

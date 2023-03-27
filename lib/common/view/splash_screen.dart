@@ -1,6 +1,6 @@
 import 'package:acutal/common/const/data.dart';
 import 'package:acutal/common/layout/default_layout.dart';
-import 'package:acutal/common/secure_storage.dart';
+import 'package:acutal/common/const/secure_storage.dart';
 import 'package:acutal/common/view/root_tab.dart';
 import 'package:acutal/user/view/login_screen.dart';
 import 'package:dio/dio.dart';

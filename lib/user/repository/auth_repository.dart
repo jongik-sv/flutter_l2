@@ -6,9 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/const/data.dart';
-import '../../common/secure_storage.dart';
 
-final authRepositoryProvider = Provider((ref) {
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return AuthRepository(baseUrl: 'http://$ip/auth', dio: dio);

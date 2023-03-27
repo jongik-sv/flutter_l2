@@ -1,17 +1,11 @@
 import 'package:acutal/common/const/colors.dart';
-import 'package:acutal/common/const/data.dart';
-import 'package:acutal/common/dio/dio.dart';
 import 'package:acutal/common/layout/default_layout.dart';
-import 'package:acutal/common/secure_storage.dart';
-import 'package:acutal/common/utils/data_utils.dart';
-import 'package:acutal/common/view/root_tab.dart';
-import 'package:acutal/user/model/auth_provider.dart';
 import 'package:acutal/user/model/user_model.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/component/custom_text_form_field.dart';
+import '../provider/user_me_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static String get routeName => 'login';
@@ -28,8 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final dio = Dio();
-    // final dio = ref.watch(dioProvider);
+
     final state = ref.watch(userMeProvider);
     return DefaultLayout(
       child: SingleChildScrollView(

@@ -1,5 +1,5 @@
 import 'package:acutal/common/view/splash_screen.dart';
-import 'package:acutal/user/model/auth_provider.dart';
+import 'package:acutal/user/provider/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,5 +13,7 @@ final routeProvider = Provider<GoRouter>((ref) {
     initialLocation: SplashScreen.routeName,
     refreshListenable: provider,
     redirect: provider.redirectLogic,
+    debugLogDiagnostics: true,
+
   );
 });

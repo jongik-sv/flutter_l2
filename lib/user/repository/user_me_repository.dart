@@ -15,6 +15,7 @@ final userMeRepositoryProvider = Provider<UserMeRepository>(
   },
 );
 
+// http://$ip/user/me
 @RestApi()
 abstract class UserMeRepository {
   factory UserMeRepository(Dio dio, {String baseUrl}) = _UserMeRepository;

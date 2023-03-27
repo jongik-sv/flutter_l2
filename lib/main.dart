@@ -1,7 +1,7 @@
 import 'package:acutal/common/component/custom_text_form_field.dart';
 import 'package:acutal/common/providor/go_route.dart';
 import 'package:acutal/common/view/splash_screen.dart';
-import 'package:acutal/user/model/auth_provider.dart';
+import 'package:acutal/user/provider/auth_provider.dart';
 import 'package:acutal/user/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

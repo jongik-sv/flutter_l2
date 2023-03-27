@@ -2,6 +2,7 @@ import 'package:acutal/common/component/pagination_list_view.dart';
 import 'package:acutal/restaurant/component/restaurant_card.dart';
 import 'package:acutal/restaurant/view/restaurant_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../provider/restaurant_provider.dart';
 
@@ -11,19 +12,20 @@ class RestaurantScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PaginationListView(
-      itemBuilder: <RestaurantModel>(context, index, model) {
+      provider: restaurantProvider,
+      itemBuilder: <RestaurantModel>(_, index, model) {
         return GestureDetector(
-          child: RestaurantCard.fromModel(model: model),
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => RestaurantDetailScreen(id: model.id),
-              ),
-            );
+            context.goNamed(RestaurantDetailScreen.routeName,
+            params: {
+              'rid': model.id,
+            });
           },
+          child: RestaurantCard.fromModel(model: model),
         );
       },
-      provider: restaurantProvider,
+
+
     );
   }
 }

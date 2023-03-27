@@ -1,31 +1,14 @@
-import 'dart:async';
-
-import 'package:acutal/common/secure_storage.dart';
 import 'package:acutal/common/view/root_tab.dart';
 import 'package:acutal/common/view/splash_screen.dart';
 import 'package:acutal/restaurant/view/restaurant_detail_screen.dart';
 import 'package:acutal/user/model/user_model.dart';
 import 'package:acutal/user/provider/user_me_provider.dart';
-import 'package:acutal/user/repository/user_me_repository.dart';
 import 'package:acutal/user/view/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../repository/auth_repository.dart';
 
-final userMeProvider =
-    StateNotifierProvider<UserMeStateNotifier, UserModelBase?>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  final userMeRepository = ref.watch(userMeRepositoryProvider);
-  final storage = ref.watch(secureStorageProvider);
-
-  return UserMeStateNotifier(
-    authRepository: authRepository,
-    repository: userMeRepository,
-    storage: storage,
-  );
-});
 
 final authProvider = ChangeNotifierProvider((ref) {
   return AuthProvider(ref: ref);
@@ -50,6 +33,7 @@ class AuthProvider extends ChangeNotifier {
             routes: [
               GoRoute(
                 path: 'restaurant/:rid',
+                name: RestaurantDetailScreen.routeName,
                 builder: (context, state) =>
                     RestaurantDetailScreen(id: state.params['rid']!),
               )
@@ -70,7 +54,7 @@ class AuthProvider extends ChangeNotifier {
   /// 앱을 처음 시작했을때
   /// 토큰이 존재하는지 확인
   /// 로그인 스크린으로 갈지, 홈스크린으로 갈지 확인하는 과정 필요
-  FutureOr<String?> redirectLogic(BuildContext context, GoRouterState state) {
+  String? redirectLogic(BuildContext context, GoRouterState state) {
     final UserModelBase? user = ref.read(userMeProvider);
     final logginIn = state.location == '/login';
 
